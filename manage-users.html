@@ -222,12 +222,17 @@
     async function loadAuthConfig() {
       try {
         const res = await fetch('auth-config.json');
-        if (!res.ok) throw new Error('Brak config');
-        return await res.json();
-      } catch (e) {
-        console.warn('Nie udało się załadować auth-config.json', e);
-        return null;
-      }
+        if (res.ok) return await res.json();
+      } catch (e) {}
+      try {
+        const res2 = await fetch('auth-config.sample.json');
+        if (res2.ok) {
+          console.warn('Użyto auth-config.sample.json (demo)');
+          return await res2.json();
+        }
+      } catch (e) {}
+      console.warn('Nie udało się załadować auth-config.json ani auth-config.sample.json');
+      return null;
     }
 
     async function deriveKeyBase64(password, saltB64, iterations) {

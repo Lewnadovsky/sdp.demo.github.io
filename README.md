@@ -80,9 +80,23 @@ git push --force
 
 Uwaga: czyszczenie historii wpływa na historię repozytorium — wszystkie współpracujące kopie będą wymagały ponownego sklonowania lub przystosowania.
 
+
 5) Rotacja i generowanie haseł
 
 - Jeśli usunąłeś plik z hashem z repo — wygeneruj nowe hasło na serwerze i przechowuj jedynie po stronie serwera (nie w repo). Jeśli chcesz, mogę wygenerować nowy salt/hash i przekazać instrukcję bez zapisywania go w repo.
+
+6) Tryb demonstracyjny (lokalny)
+
+- Dla wygody demo dodałem `auth-config.sample.json` z domyślnym użytkownikiem `admin` i hasłem `admin` (zahashowanym). Ten plik służy TYLKO do testów lokalnych.
+- Aby przywrócić działanie panelu lokalnie, skopiuj plik `auth-config.sample.json` do `auth-config.json` w katalogu projektu (nie dodawaj go do repo):
+
+```
+cp auth-config.sample.json auth-config.json
+
+# (opcjonalnie) upewnij się, że auth-config.json jest w .gitignore
+```
+
+ - Alternatywnie, skonfiguruj Basic Auth lub backendową weryfikację (zalecane dla środowisk publicznych).
 
 6) Dalsze kroki, które mogę wykonać teraz (wybierz):
 - A. Wyczyścić historię Gita (BFG/git filter-repo) i zforce'ować push (potrzebna Twoja zgoda).  

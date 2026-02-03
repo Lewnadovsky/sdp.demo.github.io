@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raporty i Analityka</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-panel.css">
+  <style>
+    .back-btn {
+      padding: 10px 20px;
+      background: #667eea;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .back-btn:hover {
+      background: #764ba2;
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .analytics-card {
+      background: var(--stat-bg);
+      padding: 25px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+      text-align: center;
+    }
+
+    .analytics-card h3 {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .analytics-card .big-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .analytics-card .trend {
+      font-size: 0.9rem;
+      color: #4caf50;
+    }
+
+    .analytics-card .trend.down {
+      color: #f44336;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .report-table th,
+    .report-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .report-table th {
+      background: var(--stat-bg);
+      font-weight: 600;
+    }
+
+    .report-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .report-table tr:hover {
+      background: var(--stat-bg);
+    }
+
+    .chart-container {
+      background: var(--stat-bg);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .chart-container h3 {
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      height: 200px;
+      gap: 10px;
+    }
+
+    .bar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      min-height: 30px;
+    }
+
+    .bar-label {
+      position: absolute;
+      bottom: -25px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .bar-value {
+      position: absolute;
+      top: -25px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- THEME TOGGLE -->
+  <div class="theme-toggle-container">
+    <button id="theme-toggle" class="theme-toggle">🌙</button>
+    <span id="theme-label">Dark mode</span>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div id="loginForm" class="login-container">
+    <h1>🔐 Panel Admin</h1>
+    <div class="error" id="errorMsg"></div>
+    <form onsubmit="login(event)">
+      <div class="form-group">
+        <label>Login:</label>
+        <input type="text" id="username" placeholder="admin" required>
+      </div>
+      <div class="form-group">
+        <label>Hasło:</label>
+        <input type="password" id="password" placeholder="admin" required>
+      </div>
+      <button type="submit">Zaloguj się</button>
+    </form>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="dashboard">
+    <div class="container">
+      <div class="dashboard-header">
+        <h1>📊 Raporty i Analityka</h1>
+        <div style="display: flex; gap: 10px;">
+          <a href="panel.html" class="back-btn">← Wróć do panelu</a>
+          <button class="logout-btn" onclick="logout()">Wyloguj się</button>
+        </div>
+      </div>
+
+      <div class="dashboard-content">
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <h3>Całkowite odwiedziny</h3>
+            <div class="big-number">12,543</div>
+            <div class="trend">↑ 23% od zeszłego miesiąca</div>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Nowych użytkowników</h3>
+            <div class="big-number">892</div>
+            <div class="trend">↑ 15% wzrost</div>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Czas na stronie</h3>
+            <div class="big-number">4m 32s</div>
+            <div class="trend">↓ 5% zmniejszenie</div>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Współczynnik konwersji</h3>
+            <div class="big-number">3.4%</div>
+            <div class="trend">↑ 0.8% wzrost</div>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Bounce rate</h3>
+            <div class="big-number">42%</div>
+            <div class="trend down">↑ 2% wzrost</div>
+          </div>
+
+          <div class="analytics-card">
+            <h3>Sesje</h3>
+            <div class="big-number">9,234</div>
+            <div class="trend">↑ 18% wzrost</div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <h3>Odwiedziny w ostatnich 7 dni</h3>
+          <div class="bar-chart">
+            <div class="bar" style="height: 45%;">
+              <div class="bar-value">650</div>
+              <div class="bar-label">Pon</div>
+            </div>
+            <div class="bar" style="height: 65%;">
+              <div class="bar-value">1,200</div>
+              <div class="bar-label">Wt</div>
+            </div>
+            <div class="bar" style="height: 50%;">
+              <div class="bar-value">850</div>
+              <div class="bar-label">Śr</div>
+            </div>
+            <div class="bar" style="height: 75%;">
+              <div class="bar-value">1,450</div>
+              <div class="bar-label">Czw</div>
+            </div>
+            <div class="bar" style="height: 55%;">
+              <div class="bar-value">950</div>
+              <div class="bar-label">Pt</div>
+            </div>
+            <div class="bar" style="height: 85%;">
+              <div class="bar-value">1,800</div>
+              <div class="bar-label">Sob</div>
+            </div>
+            <div class="bar" style="height: 70%;">
+              <div class="bar-value">1,300</div>
+              <div class="bar-label">Niedz</div>
+            </div>
+          </div>
+        </div>
+
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Źródło ruchu</th>
+              <th>Odwiedziny</th>
+              <th>Użytkownicy</th>
+              <th>Współczynnik konwersji</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Google Organic</td>
+              <td>6,234</td>
+              <td>4,892</td>
+              <td>4.2%</td>
+            </tr>
+            <tr>
+              <td>Direct</td>
+              <td>2,150</td>
+              <td>1,890</td>
+              <td>2.8%</td>
+            </tr>
+            <tr>
+              <td>Social Media</td>
+              <td>2,300</td>
+              <td>1,834</td>
+              <td>3.1%</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>934</td>
+              <td>756</td>
+              <td>5.2%</td>
+            </tr>
+            <tr>
+              <td>Referral</td>
+              <td>925</td>
+              <td>734</td>
+              <td>2.9%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    updateToggleButton(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      htmlElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateToggleButton(newTheme);
+    });
+
+    function updateToggleButton(theme) {
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      document.getElementById('theme-label').textContent = theme === 'light' ? 'Dark mode' : 'Light mode';
+    }
+
+    async function loadAuthConfig() {
+      try {
+        const res = await fetch('auth-config.json');
+        if (!res.ok) throw new Error('Brak config');
+        return await res.json();
+      } catch (e) {
+        console.warn('Nie udało się załadować auth-config.json', e);
+        return null;
+      }
+    }
+
+    async function deriveKeyBase64(password, saltB64, iterations) {
+      const enc = new TextEncoder();
+      const pwKey = await crypto.subtle.importKey('raw', enc.encode(password), {name: 'PBKDF2'}, false, ['deriveBits']);
+      const saltBytes = Uint8Array.from(atob(saltB64), c => c.charCodeAt(0));
+      const derivedBits = await crypto.subtle.deriveBits({name: 'PBKDF2', salt: saltBytes, iterations: iterations, hash: 'SHA-256'}, pwKey, 256);
+      const derived = new Uint8Array(derivedBits);
+      let binary = '';
+      for (let i = 0; i < derived.length; i++) binary += String.fromCharCode(derived[i]);
+      return btoa(binary);
+    }
+
+    window.addEventListener('load', async () => {
+      const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+      if (isLoggedIn) {
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    });
+
+    async function login(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMsg');
+
+      const cfg = await loadAuthConfig();
+      if (!cfg) {
+        errorMsg.textContent = 'Konfiguracja auth nieznaleziona.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (username !== cfg.username) {
+        errorMsg.textContent = '❌ Błędny login lub hasło!';
+        errorMsg.style.display = 'block';
+        document.getElementById('password').value = '';
+        return;
+      }
+
+      const derived = await deriveKeyBase64(password, cfg.salt, cfg.iterations);
+      if (derived === cfg.hash) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        showDashboard();
+      } else {
+        errorMsg.textContent = '❌ Błędny login lub hasło!';
+        errorMsg.style.display = 'block';
+        document.getElementById('password').value = '';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      showLogin();
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function showLogin() {
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+
+    function showDashboard() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

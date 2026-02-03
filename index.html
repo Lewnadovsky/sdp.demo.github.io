@@ -3,244 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fryzjer Męski | Miasto</title>
-  <meta name="description" content="Profesjonalny fryzjer męski w centrum miasta. Szybkie terminy, nowoczesny styl." />
-
-  <!-- Google Font -->
+  <title>Moja Strona</title>
+  <meta name="description" content="Profesjonalna strona internetowa" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --primary: #111;
-      --secondary: #f4f4f4;
-      --accent: #c59d5f;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      line-height: 1.6;
-      color: #222;
-    }
-
-    section {
-      padding: 80px 20px;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    h1, h2, h3 {
-      margin-bottom: 20px;
-      line-height: 1.2;
-    }
-
-    p {
-      margin-bottom: 16px;
-      color: #555;
-    }
-
-    /* HERO */
-    .hero {
-      background: var(--primary);
-      color: #fff;
-      text-align: center;
-    }
-
-    .hero h1 {
-      font-size: 2.5rem;
-    }
-
-    .hero p {
-      color: #ddd;
-      max-width: 600px;
-      margin: 20px auto;
-    }
-
-    .buttons {
-      margin-top: 30px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 12px 24px;
-      text-decoration: none;
-      font-weight: 600;
-      border-radius: 4px;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-    }
-
-    .btn-secondary {
-      border: 2px solid #fff;
-      color: #fff;
-    }
-
-    /* ABOUT */
-    .about {
-      background: #fff;
-      text-align: center;
-    }
-
-    .features {
-      margin-top: 30px;
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-
-    .feature {
-      font-weight: 600;
-    }
-
-    /* OFFER */
-    .offer {
-      background: var(--secondary);
-      text-align: center;
-    }
-
-    .cards {
-      margin-top: 40px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: #fff;
-      padding: 30px;
-      border-radius: 6px;
-    }
-
-    .price {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-top: 10px;
-    }
-
-    /* USP */
-    .usp {
-      text-align: center;
-    }
-
-    .usp-list {
-      margin-top: 30px;
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-      font-weight: 600;
-    }
-
-    /* CTA */
-    .cta {
-      background: var(--primary);
-      color: #fff;
-      text-align: center;
-    }
-
-    .cta p {
-      color: #ddd;
-    }
-
-    /* FOOTER */
-    footer {
-      background: #000;
-      color: #aaa;
-      text-align: center;
-      padding: 30px 20px;
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 600px) {
-      .hero h1 {
-        font-size: 2rem;
-      }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- HERO -->
-  <section class="hero">
+  <!-- HEADER -->
+  <header>
     <div class="container">
-      <h1>Fryzjer Męski w Centrum Miasta</h1>
-      <p>Profesjonalne strzyżenie, szybkie terminy i nowoczesny styl. Bez zbędnego gadania.</p>
+      <div class="header-content">
+        <div class="logo">Logo</div>
+        <nav>
+          <a href="#home">Start</a>
+          <a href="#about">O nas</a>
+          <a href="#services">Usługi</a>
+          <a href="#contact">Kontakt</a>
+          <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </nav>
+      </div>
+    </div>
+  </header>
 
-      <div class="buttons">
-        <a href="#contact" class="btn btn-primary">Umów wizytę</a>
-        <a href="tel:123456789" class="btn btn-secondary">Zadzwoń</a>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="container">
+      <h1>Witamy na naszej stronie</h1>
+      <p>Oferujemy profesjonalne rozwiązania dostosowane do Twoich potrzeb</p>
+      <div>
+        <a href="#contact" class="btn btn-primary">Skontaktuj się</a>
+        <a href="#services" class="btn btn-secondary">Dowiedz się więcej</a>
       </div>
     </div>
   </section>
 
   <!-- ABOUT -->
-  <section class="about">
+  <section id="about">
     <div class="container">
-      <h2>Kim jesteśmy</h2>
-      <p>Jesteśmy lokalnym barberem, który stawia na jakość, punktualność i dobrą atmosferę.</p>
-
+      <h2>O nas</h2>
+      <p style="text-align: center; max-width: 700px; margin: 0 auto 40px;">Jesteśmy zespołem profesjonalistów z wieloletnim doświadczeniem. Naszą misją jest dostarczanie najwyższej jakości usług i budowanie długoterminowych relacji z klientami.</p>
+      
       <div class="features">
-        <div class="feature">✔ Doświadczenie</div>
-        <div class="feature">✔ Lokalnie</div>
-        <div class="feature">✔ Szybkie terminy</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- OFFER -->
-  <section class="offer">
-    <div class="container">
-      <h2>Nasza oferta</h2>
-
-      <div class="cards">
-        <div class="card">
-          <h3>Strzyżenie</h3>
-          <p>Klasyczne i nowoczesne fryzury.</p>
-          <div class="price">50 zł</div>
+        <div class="feature-item">
+          <div style="font-size: 2.5rem;">⭐</div>
+          <strong>Doświadczenie</strong>
+          <p>Lata pracy w branży</p>
         </div>
-
-        <div class="card">
-          <h3>Broda</h3>
-          <p>Stylizacja i pielęgnacja brody.</p>
-          <div class="price">30 zł</div>
+        <div class="feature-item">
+          <div style="font-size: 2.5rem;">✓</div>
+          <strong>Jakość</strong>
+          <p>Najwyższe standardy</p>
         </div>
-
-        <div class="card">
-          <h3>Combo</h3>
-          <p>Strzyżenie + broda.</p>
-          <div class="price">70 zł</div>
+        <div class="feature-item">
+          <div style="font-size: 2.5rem;">🚀</div>
+          <strong>Innowacja</strong>
+          <p>Nowoczesne rozwiązania</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- USP -->
-  <section class="usp">
+  <!-- SERVICES -->
+  <section id="services">
     <div class="container">
-      <h2>Dlaczego my</h2>
+      <h2>Nasze usługi</h2>
+      
+      <div class="grid">
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <h3>Usługa 1</h3>
+          <p>Opis pierwszej usługi. Wyjaśnij jakie korzyści otrzyma klient, czy jest to szybkość, jakość czy innowacyjność.</p>
+        </div>
 
-      <div class="usp-list">
-        <div>✔ Bez kolejek</div>
-        <div>✔ Konkretna obsługa</div>
-        <div>✔ Świetne opinie</div>
+        <div class="card">
+          <div class="card-icon">💼</div>
+          <h3>Usługa 2</h3>
+          <p>Opis drugiej usługi. Podkreśl specjalne cechy i unikalną wartość, którą oferujesz swoim klientom.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🎯</div>
+          <h3>Usługa 3</h3>
+          <p>Opis trzeciej usługi. Skoncentruj się na rezultatach i jak Twoja usługa rozwiązuje problemy klienta.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🏆</div>
+          <h3>Usługa 4</h3>
+          <p>Opis czwartej usługi. Podaj informacje o wsparciu, gwarancjach lub dodatkowych benefitach.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section>
+    <div class="container">
+      <h2>Co mówią nasi klienci</h2>
+      
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+        <div class="testimonial">
+          <p>"Świetna obsługa i profesjonalne podejście. Polecam!"</p>
+          <div class="testimonial-author">— Jan Kowalski</div>
+        </div>
+
+        <div class="testimonial">
+          <p>"Najlepszy wybór dla naszego biznesu. Bezproblemowa współpraca od początku."</p>
+          <div class="testimonial-author">— Maria Nowak</div>
+        </div>
+
+        <div class="testimonial">
+          <p>"Szybko, efektywnie i tanio. Nie mogę się doczekać kolejnych projektów."</p>
+          <div class="testimonial-author">— Piotr Lewandowski</div>
+        </div>
       </div>
     </div>
   </section>
@@ -248,17 +127,26 @@
   <!-- CTA -->
   <section class="cta" id="contact">
     <div class="container">
-      <h2>Umów się już dziś</h2>
-      <p>Zadzwoń lub napisz i zarezerwuj termin.</p>
-      <a href="tel:123456789" class="btn btn-primary">123 456 789</a>
+      <h2>Gotowy do współpracy?</h2>
+      <p>Skontaktuj się z nami już dziś i zacznij swoją transformację</p>
+      <a href="tel:123456789" class="btn btn-primary">Zadzwoń: 123 456 789</a>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <p>Fryzjer Męski | Miasto • tel. 123 456 789</p>
-    <p>© 2026</p>
+    <div class="container">
+      <p><strong>Twoja Firma</strong></p>
+      <p>Email: kontakt@firma.pl | Tel: 123 456 789</p>
+      <div class="footer-links">
+        <a href="#">Polityka prywatności</a>
+        <a href="#">Regulamin</a>
+        <a href="#">Sitemap</a>
+      </div>
+      <p style="margin-top: 20px; font-size: 0.9rem;">© 2026 Wszystkie prawa zastrzeżone</p>
+    </div>
   </footer>
 
+  <script src="script.js"></script>
 </body>
 </html>

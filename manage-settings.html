@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ustawienia Serwisu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-panel.css">
+  <style>
+    .back-btn {
+      padding: 10px 20px;
+      background: #667eea;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .back-btn:hover {
+      background: #764ba2;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .settings-card {
+      background: var(--stat-bg);
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .settings-card h3 {
+      color: var(--text-primary);
+      margin-bottom: 15px;
+    }
+
+    .setting-item {
+      margin-bottom: 15px;
+    }
+
+    .setting-item label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .setting-item input,
+    .setting-item select {
+      width: 100%;
+      padding: 10px;
+      background: var(--card-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+
+    .setting-item input:focus,
+    .setting-item select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+      width: 50px;
+      height: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #667eea;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .save-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    .save-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- THEME TOGGLE -->
+  <div class="theme-toggle-container">
+    <button id="theme-toggle" class="theme-toggle">🌙</button>
+    <span id="theme-label">Dark mode</span>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div id="loginForm" class="login-container">
+    <h1>🔐 Panel Admin</h1>
+    <div class="error" id="errorMsg"></div>
+    <form onsubmit="login(event)">
+      <div class="form-group">
+        <label>Login:</label>
+        <input type="text" id="username" placeholder="admin" required>
+      </div>
+      <div class="form-group">
+        <label>Hasło:</label>
+        <input type="password" id="password" placeholder="admin" required>
+      </div>
+      <button type="submit">Zaloguj się</button>
+    </form>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="dashboard">
+    <div class="container">
+      <div class="dashboard-header">
+        <h1>⚙️ Ustawienia Serwisu</h1>
+        <div style="display: flex; gap: 10px;">
+          <a href="panel.html" class="back-btn">← Wróć do panelu</a>
+          <button class="logout-btn" onclick="logout()">Wyloguj się</button>
+        </div>
+      </div>
+
+      <div class="dashboard-content">
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h3>📋 Ogólne</h3>
+            <div class="setting-item">
+              <label>Nazwa serwisu:</label>
+              <input type="text" value="Moja Strona" />
+            </div>
+            <div class="setting-item">
+              <label>Email kontaktowy:</label>
+              <input type="email" value="kontakt@example.com" />
+            </div>
+            <div class="setting-item">
+              <label>Język:</label>
+              <select>
+                <option>Polski</option>
+                <option>Angielski</option>
+                <option>Niemiecki</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>🔒 Bezpieczeństwo</h3>
+            <div class="setting-item">
+              <label>SSL/HTTPS:</label>
+              <div class="toggle-switch">
+                <label class="switch">
+                  <input type="checkbox" checked>
+                  <span class="slider"></span>
+                </label>
+                <span>Włączone</span>
+              </div>
+            </div>
+            <div class="setting-item">
+              <label>Wymagaj 2FA:</label>
+              <div class="toggle-switch">
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="slider"></span>
+                </label>
+                <span>Wyłączone</span>
+              </div>
+            </div>
+            <div class="setting-item">
+              <label>Maksymalne próby logowania:</label>
+              <input type="number" value="5" />
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>📧 Email</h3>
+            <div class="setting-item">
+              <label>SMTP Host:</label>
+              <input type="text" value="smtp.example.com" />
+            </div>
+            <div class="setting-item">
+              <label>SMTP Port:</label>
+              <input type="number" value="587" />
+            </div>
+            <div class="setting-item">
+              <label>Wysyłaj notyfikacje:</label>
+              <div class="toggle-switch">
+                <label class="switch">
+                  <input type="checkbox" checked>
+                  <span class="slider"></span>
+                </label>
+                <span>Włączone</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>🌐 SEO</h3>
+            <div class="setting-item">
+              <label>Meta title domyślny:</label>
+              <input type="text" value="Moja Strona - Profesjonalne usługi" />
+            </div>
+            <div class="setting-item">
+              <label>Meta description:</label>
+              <input type="text" value="Profesjonalne rozwiązania dla Twojego biznesu" />
+            </div>
+            <div class="setting-item">
+              <label>Google Analytics ID:</label>
+              <input type="text" placeholder="UA-XXXXXXXXX-X" />
+            </div>
+          </div>
+        </div>
+
+        <button class="save-btn">💾 Zapisz ustawienia</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    updateToggleButton(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      htmlElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateToggleButton(newTheme);
+    });
+
+    function updateToggleButton(theme) {
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      document.getElementById('theme-label').textContent = theme === 'light' ? 'Dark mode' : 'Light mode';
+    }
+
+    async function loadAuthConfig() {
+      try {
+        const res = await fetch('auth-config.json');
+        if (!res.ok) throw new Error('Brak config');
+        return await res.json();
+      } catch (e) {
+        console.warn('Nie udało się załadować auth-config.json', e);
+        return null;
+      }
+    }
+
+    async function deriveKeyBase64(password, saltB64, iterations) {
+      const enc = new TextEncoder();
+      const pwKey = await crypto.subtle.importKey('raw', enc.encode(password), {name: 'PBKDF2'}, false, ['deriveBits']);
+      const saltBytes = Uint8Array.from(atob(saltB64), c => c.charCodeAt(0));
+      const derivedBits = await crypto.subtle.deriveBits({name: 'PBKDF2', salt: saltBytes, iterations: iterations, hash: 'SHA-256'}, pwKey, 256);
+      const derived = new Uint8Array(derivedBits);
+      let binary = '';
+      for (let i = 0; i < derived.length; i++) binary += String.fromCharCode(derived[i]);
+      return btoa(binary);
+    }
+
+    window.addEventListener('load', async () => {
+      const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+      if (isLoggedIn) {
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    });
+
+    async function login(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMsg');
+
+      const cfg = await loadAuthConfig();
+      if (!cfg) {
+        errorMsg.textContent = 'Konfiguracja auth nieznaleziona.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (username !== cfg.username) {
+        errorMsg.textContent = '❌ Błędny login lub hasło!';
+        errorMsg.style.display = 'block';
+        document.getElementById('password').value = '';
+        return;
+      }
+
+      const derived = await deriveKeyBase64(password, cfg.salt, cfg.iterations);
+      if (derived === cfg.hash) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        showDashboard();
+      } else {
+        errorMsg.textContent = '❌ Błędny login lub hasło!';
+        errorMsg.style.display = 'block';
+        document.getElementById('password').value = '';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      showLogin();
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function showLogin() {
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+
+    function showDashboard() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

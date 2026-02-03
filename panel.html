@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Administracyjny</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-panel.css">
+</head>
+
+<body>
+
+  <!-- THEME TOGGLE -->
+  <div class="theme-toggle-container">
+    <button id="theme-toggle" class="theme-toggle">🌙</button>
+    <span id="theme-label">Dark mode</span>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div id="loginForm" class="login-container">
+    <h1>🔐 Panel Admin</h1>
+    <div class="error" id="errorMsg"></div>
+    <form onsubmit="login(event)">
+      <div class="form-group">
+        <label>Login:</label>
+        <input type="text" id="username" placeholder="admin" required>
+      </div>
+      <div class="form-group">
+        <label>Hasło:</label>
+        <input type="password" id="password" placeholder="admin" required>
+      </div>
+      <button type="submit">Zaloguj się</button>
+    </form>
+    <p style="text-align: center; margin-top: 20px; color: #999; font-size: 0.9rem;">Demo: admin / admin</p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="dashboard">
+    <div class="container">
+      <div class="dashboard-header">
+        <h1>👋 Witamy w Panelu Administracyjnym</h1>
+        <button class="logout-btn" onclick="logout()">Wyloguj się</button>
+      </div>
+
+      <div class="dashboard-content">
+        <div class="dashboard-grid">
+          <div class="dashboard-left">
+            <h2>Statystyki</h2>
+            <p>Oto przegląd Twojego serwisu:</p>
+            
+            <div class="stats">
+              <div class="stat-card">
+                <h3>Odwiedziny</h3>
+                <div class="number">1,234</div>
+              </div>
+              <div class="stat-card">
+                <h3>Użytkownicy</h3>
+                <div class="number">45</div>
+              </div>
+              <div class="stat-card">
+                <h3>Połączenia</h3>
+                <div class="number">23</div>
+              </div>
+              <div class="stat-card">
+                <h3>Wiadomości</h3>
+                <div class="number">8</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-right">
+            <h2>Opcje zarządzania</h2>
+            <ul>
+              <li>
+                <a href="manage-content.html">📝 Zarządzaj zawartością</a>
+              </li>
+              <li>
+                <a href="manage-users.html">👥 Zarządzaj użytkownikami</a>
+              </li>
+              <li>
+                <a href="manage-settings.html">⚙️ Ustawienia serwisu</a>
+              </li>
+              <li>
+                <a href="manage-analytics.html">📊 Raporty i analityka</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+
+    // Sprawdzenie wcześniejszego wyboru użytkownika
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    updateToggleButton(savedTheme);
+
+    // Nasłuchiwanie kliknięcia na przycisk
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      htmlElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateToggleButton(newTheme);
+    });
+
+    function updateToggleButton(theme) {
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      document.getElementById('theme-label').textContent = theme === 'light' ? 'Dark mode' : 'Light mode';
+    }
+
+    // Logowanie z weryfikacją PBKDF2 przy użyciu pliku auth-config.json
+    async function loadAuthConfig() {
+      try {
+        const res = await fetch('auth-config.json');
+        if (!res.ok) throw new Error('Brak config');
+        return await res.json();
+      } catch (e) {
+        console.warn('Nie udało się załadować auth-config.json', e);
+        return null;
+      }
+    }
+
+    async function deriveKeyBase64(password, saltB64, iterations) {
+      const enc = new TextEncoder();
+      const pwKey = await crypto.subtle.importKey('raw', enc.encode(password), {name: 'PBKDF2'}, false, ['deriveBits']);
+      const saltBytes = Uint8Array.from(atob(saltB64), c => c.charCodeAt(0));
+      const derivedBits = await crypto.subtle.deriveBits({name: 'PBKDF2', salt: saltBytes, iterations: iterations, hash: 'SHA-256'}, pwKey, 256);
+      const derived = new Uint8Array(derivedBits);
+      let binary = '';
+      for (let i = 0; i < derived.length; i++) binary += String.fromCharCode(derived[i]);
+      return btoa(binary);
+    }
+
+    // Sprawdzenie czy użytkownik jest zalogowany
+    window.addEventListener('load', async () => {
+      const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+      if (isLoggedIn) {
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    });
+
+    async function login(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMsg');
+
+      const cfg = await loadAuthConfig();
+      if (!cfg) {
+        errorMsg.textContent = 'Konfiguracja auth nieznaleziona.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (username !== cfg.username) {
+        errorMsg.textContent = '❌ Błędny login lub hasło!';
+        errorMsg.style.display = 'block';
+        document.getElementById('password').value = '';
+        return;
+      }
+
+      const derived = await deriveKeyBase64(password, cfg.salt, cfg.iterations);
+      if (derived === cfg.hash) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        localStorage.setItem('adminUsername', username);
+        showDashboard();
+      } else {
+        errorMsg.textContent = '❌ Błędny login lub hasło!';
+        errorMsg.style.display = 'block';
+        document.getElementById('password').value = '';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      localStorage.removeItem('adminUsername');
+      showLogin();
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function showLogin() {
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+
+    function showDashboard() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

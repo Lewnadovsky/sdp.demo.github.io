@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zarządzaj Zawartością</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style-panel.css">
+  <style>
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .back-btn {
+      padding: 10px 20px;
+      background: #667eea;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .back-btn:hover {
+      background: #764ba2;
+    }
+
+    .content-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .content-table th,
+    .content-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .content-table th {
+      background: var(--stat-bg);
+      font-weight: 600;
+    }
+
+    .content-table tr:hover {
+      background: var(--stat-bg);
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      margin-right: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .edit-btn {
+      background: #667eea;
+      color: #fff;
+    }
+
+    .delete-btn {
+      background: #c33;
+      color: #fff;
+    }
+
+    .add-content-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .add-content-btn:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- THEME TOGGLE -->
+  <div class="theme-toggle-container">
+    <button id="theme-toggle" class="theme-toggle">🌙</button>
+    <span id="theme-label">Dark mode</span>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div id="loginForm" class="login-container">
+    <h1>🔐 Panel Admin</h1>
+    <div class="error" id="errorMsg"></div>
+    <form onsubmit="login(event)">
+      <div class="form-group">
+        <label>Login:</label>
+        <input type="text" id="username" placeholder="admin" required>
+      </div>
+      <div class="form-group">
+        <label>Hasło:</label>
+        <input type="password" id="password" placeholder="admin" required>
+      </div>
+      <button type="submit">Zaloguj się</button>
+    </form>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="dashboard">
+    <div class="container">
+      <div class="dashboard-header">
+        <h1>📝 Zarządzaj Zawartością</h1>
+        <div style="display: flex; gap: 10px;">
+          <a href="panel.html" class="back-btn">← Wróć do panelu</a>
+          <button class="logout-btn" onclick="logout()">Wyloguj się</button>
+        </div>
+      </div>
+
+      <div class="dashboard-content">
+        <button class="add-content-btn">+ Dodaj nową zawartość</button>
+        
+        <table class="content-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tytuł</th>
+              <th>Typ</th>
+              <th>Data utworzenia</th>
+              <th>Status</th>
+              <th>Akcje</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#001</td>
+              <td>Strona główna</td>
+              <td>Strona</td>
+              <td>2026-02-01</td>
+              <td>✅ Opublikowana</td>
+              <td>
+                <button class="action-btn edit-btn">Edytuj</button>
+                <button class="action-btn delete-btn">Usuń</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#002</td>
+              <td>O nas</td>
+              <td>Strona</td>
+              <td>2026-02-02</td>
+              <td>✅ Opublikowana</td>
+              <td>
+                <button class="action-btn edit-btn">Edytuj</button>
+                <button class="action-btn delete-btn">Usuń</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#003</td>
+              <td>Nowy artykuł</td>
+              <td>Blog</td>
+              <td>2026-02-03</td>
+              <td>📝 Drafty</td>
+              <td>
+                <button class="action-btn edit-btn">Edytuj</button>
+                <button class="action-btn delete-btn">Usuń</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    updateToggleButton(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      htmlElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateToggleButton(newTheme);
+    });
+
+    function updateToggleButton(theme) {
+      themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      document.getElementById('theme-label').textContent = theme === 'light' ? 'Dark mode' : 'Light mode';
+    }
+
+    async function loadAuthConfig() {
+      try {
+        const res = await fetch('auth-config.json');
+        if (!res.ok) throw new Error('Brak config');
+        return await res.json();
+      } catch (e) {
+        console.warn('Nie udało się załadować auth-config.json', e);
+        return null;
+      }
+    }
+
+    async function deriveKeyBase64(password, saltB64, iterations) {
+      const enc = new TextEncoder();
+      const pwKey = await crypto.subtle.importKey('raw', enc.encode(password), {name: 'PBKDF2'}, false, ['deriveBits']);
+      const saltBytes = Uint8Array.from(atob(saltB64), c => c.charCodeAt(0));
+      const derivedBits = await crypto.subtle.deriveBits({name: 'PBKDF2', salt: saltBytes, iterations: iterations, hash: 'SHA-256'}, pwKey, 256);
+      const derived = new Uint8Array(derivedBits);
+      let binary = '';
+      for (let i = 0; i < derived.length; i++) binary += String.fromCharCode(derived[i]);
+      return btoa(binary);
+    }
+
+    window.addEventListener('load', async () => {
+      const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+      if (isLoggedIn) {
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    });
+
+    async function login(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMsg');
+
+      const cfg = await loadAuthConfig();
+      if (!cfg) {
+        errorMsg.textContent = 'Konfiguracja auth nieznaleziona.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (username !== cfg.username) {
+        errorMsg.textContent = '❌ Błędny login lub hasło!';
+        errorMsg.style.display = 'block';
+        document.getElementById('password').value = '';
+        return;
+      }
+
+      const derived = await deriveKeyBase64(password, cfg.salt, cfg.iterations);
+      if (derived === cfg.hash) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        showDashboard();
+      } else {
+        errorMsg.textContent = '❌ Błędny login lub hasło!';
+        errorMsg.style.display = 'block';
+        document.getElementById('password').value = '';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      showLogin();
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function showLogin() {
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+
+    function showDashboard() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
